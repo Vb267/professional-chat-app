@@ -1,13 +1,24 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function AuthForm({ onSubmit }) {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(email, password, isLogin);
+    try {
+      const url = isLogin
+        ? "http://localhost:8000/login"
+        : "http://localhost:8000/signup";
+      const response = await axios.post(url, { email, password });
+      alert(response.data.message); // Alert the response message
+      onSubmit(email, password, isLogin);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong, please try again.");
+    }
   };
 
   return (
