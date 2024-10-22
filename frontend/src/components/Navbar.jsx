@@ -12,6 +12,9 @@ function Navbar() {
           <Link to="/chat">Chat</Link>
         </li>
         <li>
+          <Link to="/contacts">Contacts</Link>
+        </li>
+        <li>
           <Link to="/about">About</Link>
         </li>
         <li>
