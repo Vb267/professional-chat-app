@@ -6,6 +6,8 @@ import ChatRoom from "./components/ChatRoom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Contacts from "./pages/Contacts";
+import ChatWithUser from "./pages/ChatWithUser";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +37,26 @@ function App() {
               element={
                 isAuthenticated ? (
                   <ChatRoom />
+                ) : (
+                  <AuthForm onSubmit={handleAuthSubmit} />
+                )
+              }
+            />
+            <Route
+              path="/chat/:id"
+              element={
+                isAuthenticated ? (
+                  <ChatWithUser />
+                ) : (
+                  <AuthForm onSubmit={handleAuthSubmit} />
+                )
+              }
+            />
+            <Route
+              path="/contacts"
+              element={
+                isAuthenticated ? (
+                  <Contacts />
                 ) : (
                   <AuthForm onSubmit={handleAuthSubmit} />
                 )

@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-// Dummy data for contacts
-const contacts = [
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Jane Smith" },
-  { id: 3, name: "Alice Johnson" },
-];
+import axios from "axios";
 
 function Contacts() {
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    // Replace with authenticated user's email
+    const email = "john@example.com";
+
+    axios
+      .get(`http://localhost:8000/contacts`, {
+        params: { email }, // Send email as a parameter
+      })
+      .then((response) => {
+        setContacts(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching contacts!", error);
+      });
+  }, []);
+
   return (
     <div>
       <h2>Your Contacts</h2>
