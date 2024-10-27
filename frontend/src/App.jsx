@@ -8,9 +8,12 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Contacts from "./pages/Contacts";
 import ChatWithUser from "./pages/ChatWithUser";
+import Notifications from "./components/Notifications";
+import useNotifications from "./hooks/useNotifications";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const notifications = useNotifications();
 
   const handleAuthSubmit = (email, password, isLogin) => {
     if (isLogin) {
@@ -27,6 +30,7 @@ function App() {
       <div className="App">
         <header>
           <h1>Professional Chat Application</h1>
+          <Notifications notifications={notifications} />
         </header>
         <Navbar />
         <main>
