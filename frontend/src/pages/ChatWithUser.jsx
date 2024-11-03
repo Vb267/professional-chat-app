@@ -1,20 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-const dummyMessages = [
-  { id: 1, content: "Hello!", status: "sent" },
-  { id: 2, content: "How are you?", status: "delivered" },
-  { id: 3, content: "Did you get my message?", status: "read" },
-];
-
 function ChatWithUser() {
   const { id } = useParams();
-  const [messages, setMessages] = useState(dummyMessages);
 
+  // Sample messages with different statuses
+  const [messages, setMessages] = useState([
+    { id: 1, content: "Hello!", status: "sent" },
+    { id: 2, content: "How are you?", status: "delivered" },
+    { id: 3, content: "Did you get my message?", status: "read" },
+  ]);
+
+  // WebSocket connection to receive real-time updates
   useEffect(() => {
-    // Simulate receiving messages with updated statuses
+    const socket = new WebSocket("ws://localhost:8000/ws/notifications");
+
+    socket.onmessage = (event) => {
+      const newMessage = JSON.parse(event.data);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
+
+    socket.onclose = () => console.log("WebSocket connection closed");
+
+    return () => socket.close();
   }, []);
 
+  // Mark messages as read when the chat is viewed
+  useEffect(() => {
+    const markAsRead = async () => {
+      const updatedMessages = messages.map((msg) => {
+        if (msg.status === "delivered") {
+          msg.status = "read"; // Update status locally
+          // Simulate marking the message as read in the backend
+          fetch(`/mark_read/${msg.id}`, { method: "POST" });
+        }
+        return msg;
+      });
+      setMessages(updatedMessages);
+    };
+
+    markAsRead();
+  }, [id, messages]);
+
+  // Render ticks based on message status
   const renderTick = (status) => {
     if (status === "sent") {
       return <span>✔️</span>; // Single tick for sent
