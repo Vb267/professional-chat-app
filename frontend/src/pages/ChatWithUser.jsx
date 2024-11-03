@@ -1,43 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+
+const dummyMessages = [
+  { id: 1, content: "Hello!", status: "sent" },
+  { id: 2, content: "How are you?", status: "delivered" },
+  { id: 3, content: "Did you get my message?", status: "read" },
+];
 
 function ChatWithUser() {
   const { id } = useParams();
-  const [contact, setContact] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
+  const [messages, setMessages] = useState(dummyMessages);
 
   useEffect(() => {
-    // Replace with authenticated user's email
-    const email = "john@example.com";
+    // Simulate receiving messages with updated statuses
+  }, []);
 
-    axios
-      .get(`http://localhost:8000/chat/${id}`, {
-        params: { email }, // Send email as a parameter
-      })
-      .then((response) => {
-        setContact(response.data.contact);
-        setChatHistory(response.data.chat_history);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching chat data!", error);
-      });
-  }, [id]);
-
-  if (!contact) {
-    return <p>Loading...</p>;
-  }
+  const renderTick = (status) => {
+    if (status === "sent") {
+      return <span>✔️</span>; // Single tick for sent
+    } else if (status === "delivered") {
+      return <span>✔️✔️</span>; // Double tick for delivered
+    } else if (status === "read") {
+      return <span style={{ color: "blue" }}>✔️✔️</span>; // Double tick (blue) for read
+    }
+  };
 
   return (
     <div>
-      <h2>Chatting with {contact.name}</h2>
-      <div>
-        {chatHistory.map((message, index) => (
-          <p key={index}>
-            <strong>{message.sender}</strong>: {message.message}
-          </p>
+      <h2>Chatting with User {id}</h2>
+      <ul>
+        {messages.map((msg) => (
+          <li key={msg.id}>
+            {msg.content} {renderTick(msg.status)}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
