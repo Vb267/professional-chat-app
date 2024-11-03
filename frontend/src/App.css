@@ -89,3 +89,15 @@ nav ul li a:hover {
 .notifications li {
   margin: 5px 0;
 }
+
+.tick-single {
+  color: gray;
+}
+
+.tick-double {
+  color: gray;
+}
+
+.tick-read {
+  color: blue;
+}
